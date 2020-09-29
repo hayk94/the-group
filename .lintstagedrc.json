@@ -1,0 +1,7 @@
+{
+  "./**/*.{js,mjs,jsx,ts,tsx}": [
+    "npm run lint-fix",
+    "prettier --write",
+    "git add"
+  ]
+}
