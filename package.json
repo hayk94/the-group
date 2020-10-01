@@ -8,8 +8,13 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "axios": "^0.20.0",
+    "jwt-decode": "^3.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-hook-form": "^6.8.6",
+    "react-query": "^2.23.0",
+    "react-query-devtools": "^2.5.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3"
   },
@@ -28,8 +33,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-mock-server": "json-server-auth db.json"
+    "start-mock-server": "json-server-auth db.json --port 3004 --watch"
   },
+  "proxy": "http://localhost:3004",
   "eslintConfig": {
     "extends": "react-app"
   },
