@@ -5,3 +5,7 @@ export const login = ({ email, password }) => {
     .post("/login", { email, password })
     .then((response) => response.data);
 };
+
+export const register = (userDTO) => {
+  return apiClient.post("/register", userDTO).then((response) => response.data);
+};

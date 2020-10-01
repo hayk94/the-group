@@ -2,6 +2,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -16,21 +17,11 @@ import { Controller, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
+import { Copyright } from "../components/shared/CopyrightComponent";
 import { setAuthTokensToLocalStorage } from "../helpers/authLocalStorage";
 import { REGISTER_PATH } from "../routes";
 import { setAuthTokens } from "../services/apiClient";
 import { login } from "../services/userService";
-
-const Copyright = () => (
-  <Typography variant="body2" color="textSecondary" align="center">
-    {"Copyright © "}
-    <Link color="inherit" href="https://material-ui.com/">
-      Your Website
-    </Link>{" "}
-    {new Date().getFullYear()}
-    {"."}
-  </Typography>
-);
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -85,7 +76,6 @@ const LoginView = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -148,7 +138,7 @@ const LoginView = () => {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            {isLoading ? <CircularProgress size={25} /> : "Sign In"}
           </Button>
           <Grid container>
             <Grid item xs>
