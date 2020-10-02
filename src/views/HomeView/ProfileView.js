@@ -19,11 +19,7 @@ import {
 } from "../../helpers/authLocalStorage";
 import { formFieldRules } from "../../helpers/formHelpers";
 import { setAuthTokens } from "../../services/apiClient";
-import {
-  getUser,
-  registerUser,
-  updateUserProfile,
-} from "../../services/userService";
+import { getUser, updateUserProfile } from "../../services/userService";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

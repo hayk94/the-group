@@ -22,3 +22,7 @@ export const getUser = (key, id) => {
     .get(`${USERS_BASE_URL}/${id}`)
     .then((response) => response.data);
 };
+
+export const getUserList = () => {
+  return apiClient.get(`${USERS_BASE_URL}`).then((response) => response.data);
+};

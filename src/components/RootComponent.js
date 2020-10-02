@@ -19,8 +19,8 @@ const RootComponent = () => (
           <AppComponent />
         </Router>
       </ThemeProvider>
+      <ReactQueryDevtools />
     </ReactQueryCacheProvider>
-    <ReactQueryDevtools />
   </>
 );
 

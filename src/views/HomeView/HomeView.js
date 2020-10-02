@@ -3,12 +3,10 @@ import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
-import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -22,7 +20,8 @@ import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 
 import ListItemLink from "../../components/shared/ListItemLink";
-import { GROUPS_PATH, PROFILE_PATH } from "../../routes";
+import { GROUP_LIST_PATH, PROFILE_PATH } from "../../routes";
+import GroupListView from "./GroupListView/GroupListView";
 import ProfileView from "./ProfileView";
 
 const drawerWidth = 240;
@@ -172,7 +171,7 @@ export default function Dashboard() {
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </ListItemLink>
-          <ListItemLink to={GROUPS_PATH}>
+          <ListItemLink to={GROUP_LIST_PATH}>
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
@@ -187,7 +186,9 @@ export default function Dashboard() {
             <Route path={PROFILE_PATH}>
               <ProfileView />
             </Route>
-            <Route path={GROUPS_PATH}>Groups</Route>
+            <Route path={GROUP_LIST_PATH}>
+              <GroupListView />
+            </Route>
             <Redirect from="/" to={PROFILE_PATH} />
           </Switch>
         </Container>
