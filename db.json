@@ -245,7 +245,11 @@
       "password": "$2a$10$qd6MbD5ovQMLHCHwBRNovOQHmDG5jEwn/tx9gL9lYc1bQe2rlZFgK",
       "first_name": "Hayk",
       "last_name": "Safaryan",
-      "id": 21
+      "id": 21,
+      "department": "dd",
+      "job title": "dd",
+      "country": "dd",
+      "city": "dd"
     }
   ]
 }

@@ -16,9 +16,10 @@ import { Link as RouterLink, useHistory } from "react-router-dom";
 
 import { Copyright } from "../components/shared/CopyrightComponent";
 import { setAuthTokensToLocalStorage } from "../helpers/authLocalStorage";
+import { emailFieldRules, formFieldRules } from "../helpers/formHelpers";
 import { LOGIN_PATH } from "../routes";
 import { setAuthTokens } from "../services/apiClient";
-import { register } from "../services/userService";
+import { registerUser } from "../services/userService";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,22 +44,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const formFieldRules = {
-  required: "Required",
-  maxLength: {
-    value: 256,
-    message: "Should be less than 256 chars",
-  },
-};
-
-const emailFieldRules = {
-  ...formFieldRules,
-  pattern: {
-    value: /[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+\.[a-z0-9-]+/,
-    message: "Please enter a valid email",
-  },
-};
-
 const RegisterView = () => {
   const classes = useStyles();
 
@@ -69,7 +54,7 @@ const RegisterView = () => {
   const [
     mutate,
     { status, isIdle, isLoading, isSuccess, isError, data, error, reset },
-  ] = useMutation(register, {
+  ] = useMutation(registerUser, {
     // onMutate,
     onSuccess: (data) => {
       console.log("data", data);

@@ -21,7 +21,7 @@ import { Copyright } from "../components/shared/CopyrightComponent";
 import { setAuthTokensToLocalStorage } from "../helpers/authLocalStorage";
 import { REGISTER_PATH } from "../routes";
 import { setAuthTokens } from "../services/apiClient";
-import { login } from "../services/userService";
+import { loginUser } from "../services/userService";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,7 +56,7 @@ const LoginView = () => {
   const [
     mutate,
     { status, isIdle, isLoading, isSuccess, isError, data, error, reset },
-  ] = useMutation(login, {
+  ] = useMutation(loginUser, {
     // onMutate,
     onSuccess: (data) => {
       console.log("data", data);

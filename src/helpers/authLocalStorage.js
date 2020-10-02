@@ -4,6 +4,6 @@ export const setAuthTokensToLocalStorage = (tokens) => {
   });
 };
 
-export const getAccessToken = () => {
+export const getAccessTokenFromLocalStorage = () => {
   return localStorage.getItem("accessToken");
 };
