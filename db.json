@@ -345,6 +345,18 @@
           "id": 3
         },
         {
+          "email": "hloughton7@drupal.org",
+          "password": "$2a$10$2WmzVKs4Dn4KOGmXfyiT7uZWgRMUVM.k3dIKCqERL3SDL6ExVMEXG",
+          "first_name": "Hastie",
+          "last_name": "Loughton",
+          "gender": "Male",
+          "department": "Product Management",
+          "job title": "Recruiting Manager",
+          "country": "China",
+          "city": "Jinzhuang",
+          "id": 8
+        },
+        {
           "email": "lyves1@hugedomains.com",
           "password": "$2a$10$xGROdp.YMvriWK7xCHWbHuG1yi5FuEwMu.HIKS9m5Kaf/CqQurzDe",
           "first_name": "Lanita",
@@ -367,6 +379,71 @@
           "country": "Russia",
           "city": "Nytva",
           "id": 5
+        }
+      ]
+    },
+    {
+      "name": "group",
+      "userId": "1",
+      "id": 6
+    },
+    {
+      "name": "group",
+      "userId": "1",
+      "id": 7
+    },
+    {
+      "name": "group",
+      "userId": "1",
+      "id": 8,
+      "userIds": [
+        {
+          "email": "dmannakee2@psu.edu",
+          "password": "$2a$10$ztDYFiYDgbOzLgc1O2uu3.bWV4khoU.JPNiYU/Uzs2Dg6hd04vj6y",
+          "first_name": "Donny",
+          "last_name": "Mannakee",
+          "gender": "Female",
+          "department": "Human Resources",
+          "job title": "Health Coach II",
+          "country": "Armenia",
+          "city": "Sevan",
+          "id": 3
+        },
+        {
+          "email": "mclink4@netscape.com",
+          "password": "$2a$10$utSns8BImGB/i3WEs6jp/.2k3w9OplUvqawXMDNtLlV6qh7CMF7tu",
+          "first_name": "Marci",
+          "last_name": "Clink",
+          "gender": "Female",
+          "department": "Human Resources",
+          "job title": "Nuclear Power Engineer",
+          "country": "Russia",
+          "city": "Nytva",
+          "id": 5
+        },
+        {
+          "email": "msealey0@techcrunch.com",
+          "password": "$2a$10$ijk9QtMIKuPzEkoF7Blkx.6gJ2gx8DBy60EB6WewUS9jOZ9x1E/MO",
+          "first_name": "Marigold",
+          "last_name": "Sealey",
+          "gender": "Female",
+          "department": "Marketing",
+          "job title": "Analog Circuit Design manager",
+          "country": "China",
+          "city": "Damaying",
+          "id": 1
+        },
+        {
+          "email": "ftimmermann6@nba.com",
+          "password": "$2a$10$aakw2AlhqWfti9VBRN7c.OkW9iZAhyvMZj3Ac11gTG9AURcsJJjnu",
+          "first_name": "Fonz",
+          "last_name": "Timmermann",
+          "gender": "Male",
+          "department": "Legal",
+          "job title": "Geological Engineer",
+          "country": "Russia",
+          "city": "Cherkasskoye",
+          "id": 7
         }
       ]
     }

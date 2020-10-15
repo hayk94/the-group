@@ -1,6 +1,6 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
-import React from "react";
+import React, { Suspense } from "react";
 import { QueryCache, ReactQueryCacheProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query-devtools";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -16,7 +16,9 @@ const RootComponent = () => (
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <AppComponent />
+          <Suspense fallback={"loading"}>
+            <AppComponent />
+          </Suspense>
         </Router>
       </ThemeProvider>
       <ReactQueryDevtools />

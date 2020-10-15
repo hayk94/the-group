@@ -14,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useMutation } from "react-query";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
@@ -49,6 +50,8 @@ const useStyles = makeStyles((theme) => ({
 const LoginView = () => {
   const classes = useStyles();
 
+  const { t } = useTranslation();
+
   const { handleSubmit, errors, control } = useForm();
 
   const history = useHistory();
@@ -81,7 +84,7 @@ const LoginView = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          {t("loginViewFormTitle")}
         </Typography>
 
         <form
