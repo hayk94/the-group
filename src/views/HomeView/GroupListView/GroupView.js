@@ -9,18 +9,22 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import useTheme from "@material-ui/core/styles/useTheme";
 import Typography from "@material-ui/core/Typography";
+import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useMutation, useQuery, useQueryCache } from "react-query";
 import { useParams } from "react-router-dom";
 import stringToColor from "string-to-color";
 
+import UserDiffDialogComponent from "../../../components/GroupList/Group/UserDiffDialogComponent";
+import { getAccessTokenFromLocalStorage } from "../../../helpers/authLocalStorage";
+import useDialog from "../../../hooks/useDialog";
 import {
   createGroup,
   getGroup,
   updateGroupUsers,
 } from "../../../services/groupService";
-import { getUserList } from "../../../services/userService";
+import { getUser, getUserList } from "../../../services/userService";
 
 const USER_LIST_DROP_ID = "droppable";
 const GROUP_USER_LIST_DROP_ID = "droppable2";
@@ -39,6 +43,19 @@ const GroupView = () => {
   const { groupId } = useParams();
   const theme = useTheme();
   const queryCache = useQueryCache();
+
+  const [
+    isUserDiffDialogOpen,
+    openUserDiffDialog,
+    closeUserDiffDialog,
+  ] = useDialog();
+
+  const [diffUserId, setDiffUserId] = useState(null);
+
+  const onUserDiff = (diffUserId) => {
+    setDiffUserId(diffUserId);
+    openUserDiffDialog();
+  };
 
   const { data: groupData, isLoading: isGroupQueryLoading } = useQuery(
     ["groupQueryKey", groupId],
@@ -144,131 +161,158 @@ const GroupView = () => {
     }
   };
 
+  const renderUserDiffDialog = () => {
+    if (!isUserDiffDialogOpen || !diffUserId) {
+      return null;
+    }
+    return (
+      <UserDiffDialogComponent
+        open={isUserDiffDialogOpen}
+        handleClose={closeUserDiffDialog}
+        diffUserId={diffUserId}
+      />
+    );
+  };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.listPaper} elevation={3}>
-            <Typography component={"h6"} variant={"h6"}>
-              Users
-            </Typography>
-            <Droppable droppableId={USER_LIST_DROP_ID}>
-              {(provided, snapshot) => (
-                <List ref={provided.innerRef}>
-                  {userList?.map((user, index) => {
-                    const {
-                      first_name,
-                      last_name,
-                      ["job title"]: jobTitle,
-                      department,
-                      id,
-                    } = user;
-                    const fullName = `${first_name} ${last_name}`;
-                    const color = stringToColor(fullName);
-                    return (
-                      <Draggable
-                        key={id}
-                        draggableId={id?.toString()}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <Paper
-                            className={classes.listItemPaper}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={provided.draggableProps.style}
-                          >
-                            <ListItem>
-                              <ListItemAvatar>
-                                <Avatar
-                                  alt={`Avatar`}
-                                  style={{
-                                    color: theme.palette.getContrastText(color),
-                                    backgroundColor: color,
-                                  }}
-                                >
-                                  {first_name[0]}
-                                </Avatar>
-                              </ListItemAvatar>
-                              <ListItemText
-                                primary={fullName}
-                                secondary={`${jobTitle}, ${department}`}
-                              />
-                            </ListItem>
-                          </Paper>
-                        )}
-                      </Draggable>
-                    );
-                  })}
-                  {provided.placeholder}
-                </List>
-              )}
-            </Droppable>
-          </Paper>
+    <>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Paper className={classes.listPaper} elevation={3}>
+              <Typography component={"h6"} variant={"h6"}>
+                Users
+              </Typography>
+              <Droppable droppableId={USER_LIST_DROP_ID}>
+                {(provided, snapshot) => (
+                  <List ref={provided.innerRef}>
+                    {userList?.map((user, index) => {
+                      const {
+                        first_name,
+                        last_name,
+                        ["job title"]: jobTitle,
+                        department,
+                        id,
+                      } = user;
+                      const fullName = `${first_name} ${last_name}`;
+                      const color = stringToColor(fullName);
+                      return (
+                        <Draggable
+                          key={id}
+                          draggableId={id?.toString()}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <Paper
+                              className={classes.listItemPaper}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={provided.draggableProps.style}
+                              onClick={() => {
+                                onUserDiff(id);
+                              }}
+                            >
+                              <ListItem>
+                                <ListItemAvatar>
+                                  <Avatar
+                                    alt={`Avatar`}
+                                    style={{
+                                      color: theme.palette.getContrastText(
+                                        color
+                                      ),
+                                      backgroundColor: color,
+                                    }}
+                                  >
+                                    {first_name[0]}
+                                  </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                  primary={fullName}
+                                  secondary={`${jobTitle}, ${department}`}
+                                />
+                              </ListItem>
+                            </Paper>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                    {provided.placeholder}
+                  </List>
+                )}
+              </Droppable>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Paper className={classes.listPaper} elevation={3}>
+              <Typography component={"h6"} variant={"h6"}>
+                Group
+              </Typography>
+              <Droppable droppableId={GROUP_USER_LIST_DROP_ID}>
+                {(provided, snapshot) => (
+                  <List ref={provided.innerRef}>
+                    {groupData?.userIds?.map((user, index) => {
+                      const {
+                        first_name,
+                        last_name,
+                        ["job title"]: jobTitle,
+                        department,
+                        id,
+                      } = user;
+                      const fullName = `${first_name} ${last_name}`;
+                      const color = stringToColor(fullName);
+                      return (
+                        <Draggable
+                          key={id}
+                          draggableId={id?.toString()}
+                          index={index}
+                        >
+                          {(provided, snapshot) => {
+                            return (
+                              <Paper
+                                onClick={() => {
+                                  onUserDiff(id);
+                                }}
+                                className={classes.listItemPaper}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                style={provided.draggableProps.style}
+                              >
+                                <ListItem>
+                                  <ListItemAvatar>
+                                    <Avatar
+                                      alt={`Avatar`}
+                                      style={{
+                                        color: theme.palette.getContrastText(
+                                          color
+                                        ),
+                                        backgroundColor: color,
+                                      }}
+                                    >
+                                      {first_name?.[0]}
+                                    </Avatar>
+                                  </ListItemAvatar>
+                                  <ListItemText
+                                    primary={fullName}
+                                    secondary={`${jobTitle}, ${department}`}
+                                  />
+                                </ListItem>
+                              </Paper>
+                            );
+                          }}
+                        </Draggable>
+                      );
+                    })}
+                    {provided.placeholder}
+                  </List>
+                )}
+              </Droppable>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.listPaper} elevation={3}>
-            <Typography component={"h6"} variant={"h6"}>
-              Group
-            </Typography>
-            <Droppable droppableId={GROUP_USER_LIST_DROP_ID}>
-              {(provided, snapshot) => (
-                <List ref={provided.innerRef}>
-                  {groupData?.userIds?.map((user, index) => {
-                    const {
-                      first_name,
-                      last_name,
-                      ["job title"]: jobTitle,
-                      department,
-                      id,
-                    } = user;
-                    const fullName = `${first_name} ${last_name}`;
-                    const color = stringToColor(fullName);
-                    return (
-                      <Draggable
-                        key={id}
-                        draggableId={id?.toString()}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <Paper
-                            className={classes.listItemPaper}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={provided.draggableProps.style}
-                          >
-                            <ListItem>
-                              <ListItemAvatar>
-                                <Avatar
-                                  alt={`Avatar`}
-                                  style={{
-                                    color: theme.palette.getContrastText(color),
-                                    backgroundColor: color,
-                                  }}
-                                >
-                                  {first_name?.[0]}
-                                </Avatar>
-                              </ListItemAvatar>
-                              <ListItemText
-                                primary={fullName}
-                                secondary={`${jobTitle}, ${department}`}
-                              />
-                            </ListItem>
-                          </Paper>
-                        )}
-                      </Draggable>
-                    );
-                  })}
-                  {provided.placeholder}
-                </List>
-              )}
-            </Droppable>
-          </Paper>
-        </Grid>
-      </Grid>
-    </DragDropContext>
+      </DragDropContext>
+      {renderUserDiffDialog()}
+    </>
   );
 };
 

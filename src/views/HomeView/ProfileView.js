@@ -85,6 +85,7 @@ const ProfileView = () => {
     onError: () => {},
     // onSettled,
     onSuccess: (data) => {
+      console.log("data", data);
       resetForm(data);
     },
     // queryFnParamsFilter,
